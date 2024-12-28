@@ -427,6 +427,7 @@ audio::-webkit-media-controls-time-remaining-display {
 /* 推荐控制按钮样式 */
 .recommendation-controls {
     display: flex;
+    align-items: center;
     gap: 10px;
     margin-top: 10px;
 }
@@ -457,4 +458,129 @@ audio::-webkit-media-controls-time-remaining-display {
     font-size: 1.1em;
     padding: 40px;
     width: 100%;
+    grid-column: 1 / -1;
+}
+
+/* 搜索框样式 */
+.search-box {
+    margin-right: 10px;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+}
+
+.search-input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 200px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.search-btn {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 修改推荐控制按钮样式 */
+.recommendation-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* 无结果提示样式 */
+.no-songs-message {
+    text-align: center;
+    color: #666;
+    font-size: 1.1em;
+    padding: 40px;
+    width: 100%;
+    grid-column: 1 / -1;
+}
+
+/* 页面标题容器样式 */
+.title-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.page-title h1 {
+    margin: 0;
+    color: #333;
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+/* 搜索框样式 */
+.search-box {
+    justify-self: center;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+}
+
+.search-input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 250px;
+    transition: all 0.3s ease;
+}
+
+/* 换一批按钮样式 */
+.refresh-btn {
+    justify-self: end;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+    .title-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .search-box {
+        justify-self: stretch;
+    }
+    
+    .search-form {
+        width: 100%;
+    }
+    
+    .search-input {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .refresh-btn {
+        justify-self: center;
+    }
 } 

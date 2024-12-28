@@ -7,6 +7,7 @@ from django.http import JsonResponse
 import requests
 import json
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 def get_sample_songs():
     """获取音乐列表"""
@@ -132,27 +133,85 @@ def get_random_recommendations(size=12):
 def get_recommendations_view(request):
     """获取推荐列表"""
     refresh = request.GET.get('refresh', False)
+    search_query = request.GET.get('search', '').strip()
     
-    # 获取用户收藏的歌曲
+    # 如果有搜索查询，直接从QQ音乐API搜索
+    if search_query:
+        try:
+            api_url = "https://c.y.qq.com/soso/fcgi-bin/client_search_cp"
+            params = {
+                'w': search_query,  # 搜索关键词
+                'format': 'json',
+                'inCharset': 'utf-8',
+                'outCharset': 'utf-8',
+                'platform': 'yqq',
+                'needNewCode': 0,
+                'p': 1,  # 页码
+                'n': 12  # 每页返回数量
+            }
+            headers = {
+                'Referer': 'https://y.qq.com',
+                'User-Agent': 'Mozilla/5.0'
+            }
+            
+            response = requests.get(api_url, params=params, headers=headers)
+            if response.status_code == 200:
+                data = response.json()
+                search_results = []
+                
+                for song_data in data.get('data', {}).get('song', {}).get('list', []):
+                    mid = song_data.get('songmid', '')
+                    albummid = song_data.get('albummid', '')
+                    
+                    song_item = {
+                        'title': song_data.get('songname', ''),
+                        'artist': song_data.get('singer', [{}])[0].get('name', ''),
+                        'audio_url': f'https://freetyst.nf.migu.cn/public/product9th/product45/2022/07/2614/2009年06月26日博尔普斯/标清高清/MP3_128_16_Stero/60054701923.mp3',
+                        'cover_url': f'https://y.gtimg.cn/music/photo_new/T002R300x300M000{albummid}.jpg',
+                        'reason': f'搜索结果: {search_query}'
+                    }
+                    
+                    # 检查是否已被收藏
+                    try:
+                        behavior = UserBehavior.objects.get(
+                            user=request.user,
+                            song__title=song_item['title'],
+                            song__artist=song_item['artist']
+                        )
+                        song_item['is_favorited'] = behavior.favorited
+                    except UserBehavior.DoesNotExist:
+                        song_item['is_favorited'] = False
+                    
+                    search_results.append(song_item)
+                
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    return JsonResponse({'recommendations': search_results})
+                
+                return render(request, 'music/recommendation.html', {
+                    'recommendations': search_results,
+                    'search_query': search_query
+                })
+                
+        except Exception as e:
+            print(f"搜索失败: {str(e)}")
+            # 如果搜索失败，回退到本地搜索
+            pass
+    
+    # 如果没有搜索查询或API搜索失败，使用原有的推荐逻辑
     behaviors = UserBehavior.objects.filter(
         user=request.user, 
         favorited=True
     ).select_related('song')
     
-    # 从会话中获取当前推荐列表，如果没有或需要刷新则重新生成
     if refresh == 'true' or 'current_recommendations' not in request.session:
         if behaviors.exists():
-            # 获取4首相似歌曲和8首随机歌曲，总共12首
-            similar_songs = get_song_recommendations(request.user)[:4]  # 相似歌曲
-            random_songs = get_random_recommendations(8)  # 随机推荐
-            
-            # 将所有歌曲放入一个列表并随机打乱
+            similar_songs = get_song_recommendations(request.user)[:4]
+            random_songs = get_random_recommendations(8)
             all_songs = similar_songs + random_songs
             import random
-            random.shuffle(all_songs)  # 随机打乱顺序，使相似歌曲分散分布
-            recommendations = all_songs[:12]  # 确保只返回12首
+            random.shuffle(all_songs)
+            recommendations = all_songs[:12]
         else:
-            # 如果没有收藏记录，获取12首随机歌曲
             recommendations = get_random_recommendations(12)
         
         # 检查每首歌是否已被收藏
@@ -167,10 +226,8 @@ def get_recommendations_view(request):
             except UserBehavior.DoesNotExist:
                 song['is_favorited'] = False
         
-        # 保存到会话
         request.session['current_recommendations'] = [dict(r) for r in recommendations]
     else:
-        # 使用会话中的推荐列表
         recommendations = request.session.get('current_recommendations', [])
     
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -179,7 +236,8 @@ def get_recommendations_view(request):
         })
     
     return render(request, 'music/recommendation.html', {
-        'recommendations': recommendations
+        'recommendations': recommendations,
+        'search_query': search_query
     })
 
 @login_required

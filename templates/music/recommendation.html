@@ -2,9 +2,19 @@
 
 {% block content %}
 <div class="page-title">
-    <h1>为您推荐</h1>
-    <div class="recommendation-controls">
-        <button onclick="loadRecommendations()" class="btn">换一批</button>
+    <div class="title-container">
+        <h1>为您推荐</h1>
+        <div class="search-box">
+            <form method="get" action="{% url 'music:recommendations' %}" class="search-form">
+                <input type="text" 
+                       name="search" 
+                       placeholder="搜索歌曲或歌手..." 
+                       value="{{ search_query|default:'' }}"
+                       class="search-input">
+                <button type="submit" class="search-btn">搜索</button>
+            </form>
+        </div>
+        <button onclick="loadRecommendations()" class="btn refresh-btn">换一批</button>
     </div>
 </div>
 <div class="music-grid" id="recommendations-container">
@@ -35,7 +45,10 @@
 
 <script>
 function loadRecommendations() {
-    fetch('/recommendations/?refresh=true', {
+    const searchQuery = document.querySelector('.search-input').value;
+    const url = `/recommendations/?refresh=true${searchQuery ? '&search=' + encodeURIComponent(searchQuery) : ''}`;
+    
+    fetch(url, {
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
         }
@@ -44,6 +57,11 @@ function loadRecommendations() {
     .then(data => {
         const container = document.getElementById('recommendations-container');
         container.innerHTML = '';
+        
+        if (data.recommendations.length === 0) {
+            container.innerHTML = '<p class="no-songs-message">未找到匹配的歌曲</p>';
+            return;
+        }
         
         data.recommendations.forEach(song => {
             const songElement = createSongElement(song);
