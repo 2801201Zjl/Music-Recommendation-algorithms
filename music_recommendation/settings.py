@@ -52,9 +52,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'music_recommendation',
         'USER': 'root',
-        'PASSWORD': '125890@Zmx',
-        'HOST': 'scorchingft.cn',
-        'PORT': '52333',
+        'PASSWORD': 'your_password',
+        'HOST': 'your_host',
+        'PORT': 'your_port',
     }
 }
 
