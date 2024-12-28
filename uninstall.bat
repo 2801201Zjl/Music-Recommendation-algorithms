@@ -1,0 +1,1 @@
+pip uninstall django torch mysqlclient openai requests

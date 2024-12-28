@@ -1,0 +1,122 @@
+2024-12-27 17:29:06,897 - __main__ - INFO - Using device: cpu
+2024-12-27 17:29:06,898 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 17:29:06,899 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 17:29:06,900 - __main__ - INFO - System initialized successfully
+2024-12-27 17:29:06,908 - __main__ - ERROR - Error updating recommendations: (1045, "Access denied for user 'root'@'localhost' (using password: YES)")
+2024-12-27 17:29:06,908 - __main__ - INFO - Main process completed successfully
+2024-12-27 17:29:55,736 - __main__ - INFO - Using device: cpu
+2024-12-27 17:29:55,737 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 17:29:55,738 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 17:29:55,738 - __main__ - INFO - System initialized successfully
+2024-12-27 17:29:55,743 - __main__ - ERROR - Error updating recommendations: (1045, "Access denied for user 'root'@'localhost' (using password: YES)")
+2024-12-27 17:29:55,744 - __main__ - INFO - Main process completed successfully
+2024-12-27 17:31:32,364 - __main__ - INFO - Using device: cpu
+2024-12-27 17:31:32,390 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 17:31:32,391 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 17:31:32,392 - __main__ - INFO - System initialized successfully
+2024-12-27 17:31:32,397 - __main__ - ERROR - Error updating recommendations: (1045, "Access denied for user 'root'@'localhost' (using password: YES)")
+2024-12-27 17:31:32,397 - __main__ - INFO - Main process completed successfully
+2024-12-27 17:32:37,942 - __main__ - INFO - Using device: cpu
+2024-12-27 17:32:37,977 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 17:32:37,978 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 17:32:37,978 - __main__ - INFO - System initialized successfully
+2024-12-27 17:32:37,986 - __main__ - ERROR - Error updating recommendations: (1146, "Table 'music_recommendation.auth_user' doesn't exist")
+2024-12-27 17:32:37,987 - __main__ - INFO - Main process completed successfully
+2024-12-27 17:33:44,088 - __main__ - INFO - Using device: cpu
+2024-12-27 17:33:44,096 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 17:33:44,097 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 17:33:44,097 - __main__ - INFO - System initialized successfully
+2024-12-27 17:33:44,104 - __main__ - ERROR - Error updating recommendations: (1146, "Table 'music_recommendation.auth_user' doesn't exist")
+2024-12-27 17:33:44,104 - __main__ - INFO - Main process completed successfully
+2024-12-27 17:33:52,400 - __main__ - INFO - Using device: cpu
+2024-12-27 17:33:52,429 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 17:33:52,430 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 17:33:52,430 - __main__ - INFO - System initialized successfully
+2024-12-27 17:33:52,437 - __main__ - ERROR - Error updating recommendations: (1146, "Table 'music_recommendation.auth_user' doesn't exist")
+2024-12-27 17:33:52,437 - __main__ - INFO - Main process completed successfully
+2024-12-27 17:36:56,156 - __main__ - INFO - Using device: cpu
+2024-12-27 17:36:56,178 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 17:36:56,179 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 17:36:56,179 - __main__ - INFO - System initialized successfully
+2024-12-27 17:36:56,186 - __main__ - ERROR - Error updating recommendations: (1146, "Table 'music_recommendation.auth_user' doesn't exist")
+2024-12-27 17:36:56,186 - __main__ - INFO - Main process completed successfully
+2024-12-27 17:38:09,683 - __main__ - INFO - Using device: cpu
+2024-12-27 17:38:09,708 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 17:38:09,709 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 17:38:09,709 - __main__ - INFO - System initialized successfully
+2024-12-27 17:38:09,715 - __main__ - ERROR - Error updating recommendations: (1146, "Table 'music_recommendation.auth_user' doesn't exist")
+2024-12-27 17:38:09,716 - __main__ - INFO - Main process completed successfully
+2024-12-27 17:39:15,583 - __main__ - INFO - Using device: cpu
+2024-12-27 17:39:15,590 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 17:39:15,591 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 17:39:15,592 - __main__ - INFO - System initialized successfully
+2024-12-27 17:39:15,593 - __main__ - ERROR - Error updating recommendations: settings.DATABASES is improperly configured. Please supply the ENGINE value. Check settings documentation for more details.
+2024-12-27 17:39:15,593 - __main__ - INFO - Main process completed successfully
+2024-12-27 17:43:55,159 - __main__ - INFO - Using device: cpu
+2024-12-27 17:43:55,180 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 17:43:55,181 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 17:43:55,181 - __main__ - INFO - System initialized successfully
+2024-12-27 17:43:55,188 - __main__ - ERROR - Error updating recommendations: (1146, "Table 'music_recommendation.auth_user' doesn't exist")
+2024-12-27 17:43:55,188 - __main__ - INFO - Main process completed successfully
+2024-12-27 18:00:43,905 - __main__ - INFO - Using device: cpu
+2024-12-27 18:00:45,859 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 18:00:45,860 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 18:00:45,861 - __main__ - INFO - System initialized successfully
+2024-12-27 18:00:45,867 - __main__ - INFO - Recommendations update completed
+2024-12-27 18:00:45,867 - __main__ - INFO - Main process completed successfully
+2024-12-27 18:01:26,349 - __main__ - INFO - Using device: cpu
+2024-12-27 18:01:26,381 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 18:01:26,382 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 18:01:26,382 - __main__ - INFO - System initialized successfully
+2024-12-27 18:01:26,388 - __main__ - INFO - Recommendations update completed
+2024-12-27 18:01:26,388 - __main__ - INFO - Main process completed successfully
+2024-12-27 18:02:42,201 - __main__ - INFO - Using device: cpu
+2024-12-27 18:02:42,233 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 18:02:42,234 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 18:02:42,235 - __main__ - INFO - System initialized successfully
+2024-12-27 18:02:42,241 - __main__ - INFO - Recommendations update completed
+2024-12-27 18:02:42,241 - __main__ - INFO - Main process completed successfully
+2024-12-27 18:03:21,113 - __main__ - INFO - Using device: cpu
+2024-12-27 18:03:21,143 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 18:03:21,144 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 18:03:21,144 - __main__ - INFO - System initialized successfully
+2024-12-27 18:03:21,150 - __main__ - INFO - Recommendations update completed
+2024-12-27 18:03:21,151 - __main__ - INFO - Waiting 3600 seconds until next update...
+2024-12-27 18:04:49,419 - __main__ - INFO - Shutting down recommendation system...
+2024-12-27 18:04:49,419 - __main__ - INFO - Main process completed successfully
+2024-12-27 18:05:04,463 - __main__ - INFO - Using device: cpu
+2024-12-27 18:05:04,473 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 18:05:04,474 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 18:05:04,474 - __main__ - INFO - System initialized successfully
+2024-12-27 18:05:04,480 - __main__ - INFO - Recommendations update completed
+2024-12-27 18:05:04,480 - __main__ - INFO - Main process completed successfully
+2024-12-27 18:05:31,003 - __main__ - INFO - Using device: cpu
+2024-12-27 18:05:31,027 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 18:05:31,028 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 18:05:31,028 - __main__ - INFO - System initialized successfully
+2024-12-27 18:05:31,034 - __main__ - INFO - Recommendations update completed
+2024-12-27 18:05:31,034 - __main__ - INFO - Waiting 3600 seconds until next update...
+2024-12-27 18:05:36,371 - __main__ - INFO - Shutting down recommendation system...
+2024-12-27 18:05:36,371 - __main__ - INFO - Main process completed successfully
+2024-12-27 18:07:00,340 - __main__ - INFO - Using device: cpu
+2024-12-27 18:07:00,363 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 18:07:00,364 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 18:07:00,364 - __main__ - INFO - System initialized successfully
+2024-12-27 18:07:00,370 - __main__ - INFO - Recommendations update completed
+2024-12-27 18:07:00,371 - __main__ - INFO - Main process completed successfully
+2024-12-27 18:07:10,439 - __main__ - INFO - Using device: cpu
+2024-12-27 18:07:10,440 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 18:07:10,441 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 18:07:10,441 - __main__ - INFO - System initialized successfully
+2024-12-27 18:07:10,447 - __main__ - INFO - Recommendations update completed
+2024-12-27 18:07:10,447 - __main__ - INFO - Waiting 3600 seconds until next update...
+2024-12-27 18:08:46,891 - __main__ - INFO - Shutting down recommendation system...
+2024-12-27 18:08:46,891 - __main__ - INFO - Main process completed successfully
+2024-12-27 18:09:02,585 - __main__ - INFO - Using device: cpu
+2024-12-27 18:09:02,613 - __main__ - INFO - Initializing music recommendation system...
+2024-12-27 18:09:02,614 - __main__ - INFO - LLM model loaded successfully
+2024-12-27 18:09:02,614 - __main__ - INFO - System initialized successfully
+2024-12-27 18:09:02,621 - __main__ - INFO - Recommendations update completed
+2024-12-27 18:09:02,621 - __main__ - INFO - Waiting 3600 seconds until next update...
+2024-12-27 18:13:35,668 - __main__ - INFO - Shutting down recommendation system...
+2024-12-27 18:13:35,668 - __main__ - INFO - Main process completed successfully

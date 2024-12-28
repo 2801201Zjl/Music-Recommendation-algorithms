@@ -1,0 +1,32 @@
+music_recommendation/              # 项目根目录
+├── manage.py
+├── requirements.txt
+├── static/                       # 静态文件目录
+│   ├── css/
+│   ├── js/
+│   └── images/
+├── templates/                    # HTML模板目录
+│   ├── base.html
+│   ├── music/
+│   │   ├── index.html
+│   │   ├── recommendation.html
+│   │   └── detail.html
+├── music_recommendation/         # 项目配置目录
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── music/                        # 应用目录
+    ├── __init__.py
+    ├── admin.py
+    ├── apps.py
+    ├── models.py
+    ├── views.py
+    ├── urls.py
+    ├── forms.py
+    ├── utils/                    # 工具函数目录
+    │   ├── __init__.py
+    │   ├── llm_processor.py     # LLM文本处理
+    │   ├── audio_processor.py   # 音频特征提取
+    │   └── recommendation.py    # 推荐算法
+    └── migrations/ 

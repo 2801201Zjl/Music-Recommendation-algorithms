@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音乐推荐系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{% url 'music:index' %}">首页</a>
+            <a href="{% url 'music:recommendations' %}">推荐</a>
+            {% if user.is_authenticated %}
+                <span>欢迎, {{ user.username }}</span>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">退出</button>  <!-- 使用表单提交 -->
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">登录</a>
+            {% endif %}
+        </nav>
+    </header>
+    <main>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </main>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

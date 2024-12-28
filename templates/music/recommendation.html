@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-title">
+    <h1>为您推荐</h1>
+    <div class="recommendation-controls">
+        <button onclick="loadRecommendations()" class="btn">换一批</button>
+    </div>
+</div>
+<div class="music-grid" id="recommendations-container">
+    {% for song in recommendations %}
+    <div class="song-item">
+        <div class="song-info">
+            <h3>{{ song.title }}</h3>
+            <p>艺术家: {{ song.artist }}</p>
+            <p class="recommendation-reason">{{ song.reason }}</p>
+        </div>
+        <div class="song-cover-container">
+            <img src="{{ song.cover_url }}" alt="{{ song.title }}" class="song-cover">
+        </div>
+        <div class="song-player">
+            <audio controls crossorigin="anonymous">
+                <source src="{{ song.audio_url }}" type="audio/mpeg">
+                您的浏览器不支持音频播放。
+            </audio>
+        </div>
+        <button class="favorite-btn {% if song.is_favorited %}active{% endif %}" 
+                onclick="toggleFavorite(this, '{{ song.title|escapejs }}', '{{ song.artist|escapejs }}', '{{ song.audio_url|escapejs }}', '{{ song.cover_url|escapejs }}')">
+        </button>
+    </div>
+    {% empty %}
+    <p>暂无推荐歌曲</p>
+    {% endfor %}
+</div>
+
+<script>
+function loadRecommendations() {
+    fetch('/recommendations/?refresh=true', {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const container = document.getElementById('recommendations-container');
+        container.innerHTML = '';
+        
+        data.recommendations.forEach(song => {
+            const songElement = createSongElement(song);
+            container.appendChild(songElement);
+        });
+    });
+}
+
+function toggleFavorite(btn, title, artist, audioUrl, coverUrl) {
+    fetch('/api/songs/favorite/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            title: title,
+            artist: artist,
+            audio_url: audioUrl,
+            cover_url: coverUrl
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // 只更新红心状态
+            btn.classList.toggle('active');
+            
+            // 如果是收藏操作（添加收藏），刷新首页
+            if (data.favorited) {
+                if (window.opener && !window.opener.closed) {
+                    window.opener.location.reload();
+                }
+            }
+        }
+    });
+}
+
+function createSongElement(song) {  
+    const div = document.createElement('div');  
+    div.className = 'song-item';  
+    
+    const title = song.title.replace(/'/g, "\\'");  
+    const artist = song.artist.replace(/'/g, "\\'");  
+    const audioUrl = song.audio_url.replace(/'/g, "\\'");  
+    const coverUrl = song.cover_url.replace(/'/g, "\\'");  
+    const reason = song.reason ? song.reason.replace(/'/g, "\\'") : '';  
+    
+    div.innerHTML =   
+        '<div class="song-info">' +  
+            '<h3>' + title + '</h3>' +  
+            '<p>艺术家: ' + artist + '</p>' +  
+            '<p class="recommendation-reason">' + reason + '</p>' +  
+        '</div>' +  
+        '<div class="song-cover-container">' +  
+            '<img src="' + coverUrl + '" alt="' + title + '" class="song-cover">' +  
+        '</div>' +  
+        '<div class="song-player">' +  
+            '<audio controls crossorigin="anonymous">' +  
+                '<source src="' + audioUrl + '" type="audio/mpeg">' +  
+                '您的浏览器不支持音频播放。' +  
+            '</audio>' +  
+        '</div>' +  
+        '<button class="favorite-btn ' + (song.is_favorited ? 'active' : '') + '" ' +  
+            'onclick="toggleFavorite(this, \'' + title + '\', \'' + artist + '\', \'' + audioUrl + '\', \'' + coverUrl + '\')">' +  
+        '</button>';  
+    
+    return div;  
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %} 

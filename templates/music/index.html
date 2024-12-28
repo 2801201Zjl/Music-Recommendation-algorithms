@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-title">
+    <h1>我的收藏</h1>
+</div>
+<div class="music-grid">
+    {% for song in page_obj %}
+    <div class="song-item">
+        <div class="song-info">
+            <h3>{{ song.title }}</h3>
+            <p>艺术家: {{ song.artist }}</p>
+        </div>
+        {% if song.cover_url %}
+        <div class="song-cover-container">
+            <img src="{{ song.cover_url }}" alt="{{ song.title }}" class="song-cover">
+        </div>
+        {% endif %}
+        {% if song.audio_url %}
+        <div class="song-player">
+            <audio controls crossorigin="anonymous">
+                <source src="{{ song.audio_url }}" type="audio/mpeg">
+                您的浏览器不支持音频播放。
+            </audio>
+        </div>
+        {% endif %}
+        <button class="favorite-btn active" onclick="toggleFavorite(this, '{{ song.title }}', '{{ song.artist }}', '{{ song.audio_url }}', '{{ song.cover_url }}')">
+        </button>
+    </div>
+    {% empty %}
+    <p class="no-songs-message">暂无收藏的音乐，快去推荐页面发现好音乐吧！</p>
+    {% endfor %}
+</div>
+
+{% if is_paginated %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; 上一页</a>
+    {% endif %}
+    
+    <span class="current-page">
+        第 {{ page_obj.number }} 页，共 {{ paginator.num_pages }} 页
+    </span>
+    
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="page-link">下一页 &raquo;</a>
+    {% endif %}
+</div>
+{% endif %}
+
+<script>
+function toggleFavorite(btn, title, artist, audioUrl, coverUrl) {
+    fetch('/api/songs/favorite/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            title: title,
+            artist: artist,
+            audio_url: audioUrl,
+            cover_url: coverUrl
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success' && !data.favorited) {
+            // 如果取消收藏成功，移除整个歌曲元素
+            const songItem = btn.closest('.song-item');
+            songItem.remove();
+            
+            // 如果没有歌曲了，显示提示信息
+            const musicGrid = document.querySelector('.music-grid');
+            if (!musicGrid.querySelector('.song-item')) {
+                const message = document.createElement('p');
+                message.className = 'no-songs-message';
+                message.textContent = '暂无收藏的音乐，快去推荐页面发现好音乐吧！';
+                musicGrid.appendChild(message);
+            }
+        }
+    });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %}
