@@ -8,6 +8,12 @@ import requests
 import json
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.conf import settings
+import openai  # 需要安装：pip install openai
+import logging  # 添加这行
+
+# 配置logger
+logger = logging.getLogger(__name__)
 
 def get_sample_songs():
     """获取音乐列表"""
@@ -32,11 +38,33 @@ def get_sample_songs():
             for song_data in data.get('songlist', [])[:18]:  # 获取前18首歌
                 song_info = song_data.get('data', {})
                 mid = song_info.get('songmid', '')
+                
+                # 获取歌词
+                lyrics = ""
+                try:
+                    lyrics_url = f"https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg"
+                    lyrics_params = {
+                        'songmid': mid,
+                        'format': 'json',
+                        'nobase64': 1
+                    }
+                    lyrics_headers = {
+                        'Referer': 'https://y.qq.com',
+                        'User-Agent': 'Mozilla/5.0'
+                    }
+                    lyrics_response = requests.get(lyrics_url, params=lyrics_params, headers=lyrics_headers)
+                    if lyrics_response.status_code == 200:
+                        lyrics_data = lyrics_response.json()
+                        lyrics = lyrics_data.get('lyric', '')
+                except Exception as e:
+                    print(f"获取歌词失败: {e}")
+                
                 songs.append({
                     'title': song_info.get('songname', ''),
                     'artist': song_info.get('singer', [{}])[0].get('name', ''),
                     'audio_url': f'https://dl.stream.qqmusic.qq.com/C400{mid}.m4a?guid=1234567890&vkey=123456&uin=0&fromtag=38',
                     'cover_url': f'https://y.gtimg.cn/music/photo_new/T002R300x300M000{song_info.get("albummid")}.jpg',
+                    'lyrics': lyrics
                 })
             return songs
     except Exception as e:
@@ -134,20 +162,94 @@ def get_recommendations_view(request):
     """获取推荐列表"""
     refresh = request.GET.get('refresh', False)
     search_query = request.GET.get('search', '').strip()
+    search_mode = request.GET.get('search_mode', 'normal')
     
-    # 如果有搜索查询，直接从QQ音乐API搜索
+    # 如果有搜索查询
     if search_query:
         try:
+            # 如果是自然语言搜索模式
+            if search_mode == 'natural':
+                try:
+                    client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+                    
+                    # 构建提示词
+                    prompt = f"""
+                    请将以下口语化的音乐需求转换为搜索关键词：
+                    "{search_query}"
+                    只需要返回关键词，用空格分隔，不要其他内容。
+                    """
+                    
+                    try:
+                        response = client.chat.completions.create(
+                            model="gpt-3.5-turbo",
+                            messages=[
+                                {"role": "system", "content": "你是一个音乐搜索助手，帮助用户将自然语言转换为搜索关键词。"},
+                                {"role": "user", "content": prompt}
+                            ],
+                            temperature=0.7,
+                            max_tokens=50
+                        )
+                        
+                        # 获取生成的关键词
+                        keywords = response.choices[0].message.content.strip()
+                        search_query = keywords  # 使用转换后的关键词进行搜索
+                        
+                    except Exception as e:
+                        logger.error(f"OpenAI API调用失败: {str(e)}")
+                        # 如果API调用失败，继续使用原始查询
+                except Exception as e:
+                    logger.error(f"OpenAI客户端初始化失败: {str(e)}")
+            
+            # 从本地数据库搜索
+            local_songs = Song.objects.filter(
+                Q(lyrics__icontains=search_query) |
+                Q(title__icontains=search_query) |
+                Q(artist__icontains=search_query)
+            )[:12]
+            
+            if local_songs.exists():
+                search_results = []
+                for song in local_songs:
+                    song_item = {
+                        'title': song.title,
+                        'artist': song.artist,
+                        'audio_url': song.audio_url,
+                        'cover_url': song.cover_url,
+                        'reason': f'匹配歌词/标题: {search_query}'
+                    }
+                    
+                    # 检查是否已被收藏
+                    try:
+                        behavior = UserBehavior.objects.get(
+                            user=request.user,
+                            song=song
+                        )
+                        song_item['is_favorited'] = behavior.favorited
+                    except UserBehavior.DoesNotExist:
+                        song_item['is_favorited'] = False
+                    
+                    search_results.append(song_item)
+                    
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    return JsonResponse({'recommendations': search_results})
+                
+                return render(request, 'music/recommendation.html', {
+                    'recommendations': search_results,
+                    'search_query': search_query,
+                    'search_mode': search_mode
+                })
+            
+            # 如果本地没有找到，则尝试从QQ音乐API搜索
             api_url = "https://c.y.qq.com/soso/fcgi-bin/client_search_cp"
             params = {
-                'w': search_query,  # 搜索关键词
+                'w': search_query,
                 'format': 'json',
                 'inCharset': 'utf-8',
                 'outCharset': 'utf-8',
                 'platform': 'yqq',
                 'needNewCode': 0,
-                'p': 1,  # 页码
-                'n': 12  # 每页返回数量
+                'p': 1,
+                'n': 12
             }
             headers = {
                 'Referer': 'https://y.qq.com',
@@ -189,11 +291,12 @@ def get_recommendations_view(request):
                 
                 return render(request, 'music/recommendation.html', {
                     'recommendations': search_results,
-                    'search_query': search_query
+                    'search_query': search_query,
+                    'search_mode': search_mode
                 })
                 
         except Exception as e:
-            print(f"搜索失败: {str(e)}")
+            logger.error(f"搜索失败: {str(e)}")
             # 如果搜索失败，回退到本地搜索
             pass
     
@@ -237,7 +340,8 @@ def get_recommendations_view(request):
     
     return render(request, 'music/recommendation.html', {
         'recommendations': recommendations,
-        'search_query': search_query
+        'search_query': search_query,
+        'search_mode': search_mode
     })
 
 @login_required

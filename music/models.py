@@ -6,6 +6,7 @@ class Song(models.Model):
     artist = models.CharField(max_length=200)
     audio_url = models.URLField(default='https://example.com/default-audio.mp3')
     cover_url = models.URLField(default='https://example.com/default-cover.jpg')
+    lyrics = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

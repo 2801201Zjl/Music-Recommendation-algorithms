@@ -51,7 +51,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'music_recommendation',
-        'USER': 'root',
+        'USER': 'your_username',
         'PASSWORD': 'your_password',
         'HOST': 'your_host',
         'PORT': 'your_port',
@@ -67,3 +67,6 @@ LOGOUT_REDIRECT_URL = '/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
+
+# OpenAI API配置
+OPENAI_API_KEY = 'your-openai-api-key-here'  # 替换为您的OpenAI API密钥 

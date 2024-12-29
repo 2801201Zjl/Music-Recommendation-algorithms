@@ -6,12 +6,24 @@
         <h1>为您推荐</h1>
         <div class="search-box">
             <form method="get" action="{% url 'music:recommendations' %}" class="search-form">
-                <input type="text" 
-                       name="search" 
-                       placeholder="搜索歌曲或歌手..." 
-                       value="{{ search_query|default:'' }}"
-                       class="search-input">
-                <button type="submit" class="search-btn">搜索</button>
+                <div class="search-mode-toggle">
+                    <label>
+                        <input type="radio" name="search_mode" value="normal" {% if search_mode != 'natural' %}checked{% endif %}>
+                        普通搜索
+                    </label>
+                    <label>
+                        <input type="radio" name="search_mode" value="natural" {% if search_mode == 'natural' %}checked{% endif %}>
+                        自然语言描述
+                    </label>
+                </div>
+                <div class="search-input-container">
+                    <input type="text" 
+                           name="search" 
+                           placeholder="{% if search_mode == 'natural' %}试试这样描述：想听一些悲伤的情歌...{% else %}搜索歌曲或歌手...{% endif %}" 
+                           value="{{ search_query|default:'' }}"
+                           class="search-input">
+                    <button type="submit" class="search-btn">搜索</button>
+                </div>
             </form>
         </div>
         <button onclick="loadRecommendations()" class="btn refresh-btn">换一批</button>

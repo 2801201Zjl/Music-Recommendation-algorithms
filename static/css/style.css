@@ -583,4 +583,44 @@ audio::-webkit-media-controls-time-remaining-display {
     .refresh-btn {
         justify-self: center;
     }
+}
+
+/* 搜索模式切换样式 */
+.search-mode-toggle {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.search-mode-toggle label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+}
+
+.search-mode-toggle input[type="radio"] {
+    cursor: pointer;
+}
+
+.search-input-container {
+    display: flex;
+    gap: 10px;
+}
+
+/* 更新搜索框样式 */
+.search-input {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 300px;
+    transition: all 0.3s ease;
+}
+
+.search-input::placeholder {
+    color: #999;
+    font-style: italic;
 } 
